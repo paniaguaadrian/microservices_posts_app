@@ -4,8 +4,11 @@ const bodyParser = require("body-parser");
 // To generate a new ID  that we are going to asign  to a posts that user try to create.
 const { randomBytes } = require("crypto");
 
+const cors = require("cors");
+
 const app = express();
 app.use(bodyParser.json());
+app.use(cors());
 
 // Variable to storage created posts
 const posts = {};
