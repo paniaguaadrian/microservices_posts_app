@@ -13,10 +13,12 @@ app.use(cors());
 // Variable to storage created posts
 const posts = {};
 
+// * GET all posts
 app.get("/posts", (req, res) => {
   res.send(posts);
 });
 
+// * Create a post
 app.post("/posts", (req, res) => {
   // Create a random ID
   const id = randomBytes(4).toString("hex");
