@@ -1,9 +1,14 @@
 import React from "react";
 
-import PostCreate from "./components/PostCreate";
-import PostList from "./components/PostList";
+// * Components
+// Posts
+import PostCreate from "./components/Posts/PostCreate";
+import PostList from "./components/Posts/PostList";
 
-export default () => {
+// Comments
+import CommentCreate from "./components/Comments/CommentCreate";
+
+const App = () => {
   return (
     <div className="container">
       <h1>Create Post</h1>
@@ -14,3 +19,5 @@ export default () => {
     </div>
   );
 };
+
+export default App;
