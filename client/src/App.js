@@ -5,9 +5,6 @@ import React from "react";
 import PostCreate from "./components/Posts/PostCreate";
 import PostList from "./components/Posts/PostList";
 
-// Comments
-import CommentCreate from "./components/Comments/CommentCreate";
-
 const App = () => {
   return (
     <div className="container">
