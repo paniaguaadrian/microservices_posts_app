@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { randomBytes } = require("crypto");
 const cors = require("cors");
+const axios = require("axios");
 
 const app = express();
 app.use(bodyParser.json());
@@ -10,11 +11,17 @@ app.use(cors());
 // Variable to store created comments.
 const commentsByPostId = {};
 
+// * @desc      Get all comments for that postID
+// * @route     GET /posts/:id/comments
+// * @access    Public
 app.get("/posts/:id/comments", (req, res) => {
   res.send(commentsByPostId[req.params.id] || []);
 });
 
-app.post("/posts/:id/comments", (req, res) => {
+// * @desc      Create a comment for that postID
+// * @route     POST /posts/:id/comments
+// * @access    Public
+app.post("/posts/:id/comments", async (req, res) => {
   // Create a random ID
   const commentId = randomBytes(4).toString("hex");
   const { content } = req.body;
@@ -25,10 +32,28 @@ app.post("/posts/:id/comments", (req, res) => {
 
   commentsByPostId[req.params.id] = comments;
 
+  // ? Emit an event (EVENT_BUS)
+  await axios.post("http://localhost:4005/events", {
+    type: "CommentCreated",
+    data: {
+      id: commentId,
+      content,
+      postId: req.params.id,
+    },
+  });
+
   res.status(201).send(comments);
   return;
 });
 
+// ! New post request handeler to send our events
+app.post("/events", (req, res) => {
+  console.log("Reveived event", req.body.type);
+
+  res.send({});
+});
+
+// * Listening PORT
 app.listen(4001, () => {
   console.log("Listening on 4001");
 });

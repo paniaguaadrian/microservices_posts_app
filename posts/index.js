@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const axios = require("axios");
 
 // To generate a new ID  that we are going to asign  to a posts that user try to create.
 const { randomBytes } = require("crypto");
@@ -13,13 +14,17 @@ app.use(cors());
 // Variable to storage created posts
 const posts = {};
 
-// * GET all posts
+// * @desc      Get all posts created
+// * @route     GET /posts
+// * @access    Public
 app.get("/posts", (req, res) => {
   res.send(posts);
 });
 
-// * Create a post
-app.post("/posts", (req, res) => {
+// * @desc      Create a post
+// * @route     POST /posts
+// * @access    Public
+app.post("/posts", async (req, res) => {
   // Create a random ID
   const id = randomBytes(4).toString("hex");
   const { title } = req.body;
@@ -29,9 +34,28 @@ app.post("/posts", (req, res) => {
     title,
   };
 
+  // ? Emit an event (EVENT_BUS)
+  await axios.post("http://localhost:4005/events", {
+    // ? The event that we want to send it over
+    type: "PostCreated",
+    // ? The data that we want from that event, and the data that we want to send
+    data: {
+      id,
+      title,
+    },
+  });
+
   res.status(201).send(posts[id]);
 });
 
+// ! New post request handeler to send our events
+app.post("/events", (req, res) => {
+  console.log("Reveived event", req.body.type);
+
+  res.send({});
+});
+
+// * Listening PORT
 app.listen(4000, () => {
   console.log("Listening on  4000");
 });

@@ -24,6 +24,7 @@ app.post("/events", (req, res) => {
   res.send({ status: "OK" });
 });
 
+// * Listening PORT
 app.listen(4005, () => {
   console.log("Listening on port 4005");
 });
