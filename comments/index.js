@@ -11,16 +11,12 @@ app.use(cors());
 // Variable to store created comments.
 const commentsByPostId = {};
 
-// * @desc      Get all comments for that postID
-// * @route     GET /posts/:id/comments
-// * @access    Public
+// @desc      Get all comments for that postID
 app.get("/posts/:id/comments", (req, res) => {
   res.send(commentsByPostId[req.params.id] || []);
 });
 
-// * @desc      Create a comment for that postID
-// * @route     POST /posts/:id/comments
-// * @access    Public
+// @desc      Create a comment for that postID
 app.post("/posts/:id/comments", async (req, res) => {
   // Create a random ID
   const commentId = randomBytes(4).toString("hex");
@@ -28,7 +24,8 @@ app.post("/posts/:id/comments", async (req, res) => {
 
   const comments = commentsByPostId[req.params.id] || [];
 
-  comments.push({ id: commentId, content });
+  // That's the comment itself.
+  comments.push({ id: commentId, content, status: "pending" });
 
   commentsByPostId[req.params.id] = comments;
 
@@ -39,6 +36,7 @@ app.post("/posts/:id/comments", async (req, res) => {
       id: commentId,
       content,
       postId: req.params.id,
+      status: "pending",
     },
   });
 
@@ -53,7 +51,7 @@ app.post("/events", (req, res) => {
   res.send({});
 });
 
-// * Listening PORT
+// Listening PORT
 app.listen(4001, () => {
   console.log("Listening on 4001");
 });

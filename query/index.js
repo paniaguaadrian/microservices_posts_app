@@ -7,27 +7,15 @@ app.use(bodyParser.json());
 app.use(cors());
 
 const posts = {};
-// TODO QUICK EXAMPLE OF A POST OBJECT
-// post1 === {
-//     "asjdb12",
-//     title: "post title",
-//     comments: [
-//         {id: "akjsbdnakjs", comment: "comment"}
-//     ]
-// }
 
-// ! Put together our 2 routes handlers GET /posts POST /events
-// * @desc      Get all the posts
-// * @route     GET /posts
-// * @access    Public
+// Put together our 2 routes handlers GET /posts POST /events
+// @desc      Get all the posts
 app.get("/posts", (req, res) => {
   res.send(posts);
 });
 
-// * @desc      Post the event
-// * @route     POST /events
-// * @access    Public
-// ! Endpoint to recive events from the event bus
+// @desc      Post the event
+// Endpoint to recive events from the event bus
 app.post("/events", (req, res) => {
   const { type, data } = req.body;
 
@@ -38,10 +26,10 @@ app.post("/events", (req, res) => {
   }
 
   if (type === "CommentCreated") {
-    const { id, content, postId } = data;
+    const { id, content, postId, status } = data;
 
     const post = posts[postId];
-    post.comments.push({ id, content });
+    post.comments.push({ id, content, status });
   }
 
   console.log(posts);

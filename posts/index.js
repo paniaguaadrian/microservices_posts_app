@@ -14,16 +14,12 @@ app.use(cors());
 // Variable to storage created posts
 const posts = {};
 
-// * @desc      Get all posts created
-// * @route     GET /posts
-// * @access    Public
+// @desc      Get all posts created
 app.get("/posts", (req, res) => {
   res.send(posts);
 });
 
-// * @desc      Create a post
-// * @route     POST /posts
-// * @access    Public
+// @desc      Create a post
 app.post("/posts", async (req, res) => {
   // Create a random ID
   const id = randomBytes(4).toString("hex");
@@ -55,7 +51,7 @@ app.post("/events", (req, res) => {
   res.send({});
 });
 
-// * Listening PORT
+// Listening PORT
 app.listen(4000, () => {
   console.log("Listening on  4000");
 });
